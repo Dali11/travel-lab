@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:seed": "dotenv -e .env.local -- tsx db/seed.ts",
     "db:seed:hotels": "dotenv -e .env.local -- tsx db/seed-hotels.ts"
@@ -15,12 +15,15 @@
     "@neondatabase/serverless": "^1.1.0",
     "@vercel/blob": "^2.8.0",
     "drizzle-orm": "^0.45.3",
+    "mapbox-gl": "^3.32.0",
     "next": "16.3.6",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1149.0",
     "@tailwindcss/postcss": "^4",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

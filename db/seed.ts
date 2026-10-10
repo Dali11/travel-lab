@@ -1,4 +1,4 @@
-import { db } from "./index";
+import { getDb } from "./index";
 import { places } from "./schema";
 
 const data = [
@@ -47,7 +47,7 @@ const data = [
 ];
 
 async function main() {
-    await db.insert(places).values(data);
+    await getDb().insert(places).values(data);
     console.log(`Seeded ${data.length} places.`);
 }
 

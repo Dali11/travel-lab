@@ -1,12 +1,66 @@
 import Link from "next/link";
-import { db } from "@/db";
+import { getDb, isDbConfigured } from "@/db";
 import { places, hotels } from "@/db/schema";
 
+type Row = { id: number; slug: string; name: string; imageUrl: string | null };
+
+/**
+ * Admin photo dashboard.
+ *
+ * This reads Postgres, so it is the one page in the app that cannot be built
+ * without a database. It is also unauthenticated and says so on the page — see
+ * .env.example. Do not put it behind a public hostname without auth.
+ *
+ * `export const dynamic = "force-dynamic"` keeps it out of the build's static
+ * pass entirely. Without it Next tries to collect this page's data during
+ * `next build`, which throws when DATABASE_URL is unset and fails the whole
+ * build — including for a developer who only wants to work on the public site.
+ *
+ * A missing database is still handled at render time, so visiting /admin
+ * without one shows an explanation rather than a 500.
+ */
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
-    const [allPlaces, allHotels] = await Promise.all([
-        db.select().from(places),
-        db.select().from(hotels),
-    ]);
+    if (!isDbConfigured()) {
+        return (
+            <div className="min-h-screen bg-cream px-16 py-16">
+                <h1 className="font-display text-3xl font-semibold mb-2">Admin</h1>
+                <p className="text-sm text-muted max-w-prose">
+                    No database connection is configured. Set{" "}
+                    <code className="text-ink">DATABASE_URL</code> in{" "}
+                    <code className="text-ink">.env.local</code>, then run{" "}
+                    <code className="text-ink">npm run db:push</code> to create the
+                    tables and <code className="text-ink">npm run db:seed</code> to
+                    load them.
+                </p>
+            </div>
+        );
+    }
+
+    let allPlaces: Row[] = [];
+    let allHotels: Row[] = [];
+
+    try {
+        const db = getDb();
+        [allPlaces, allHotels] = await Promise.all([
+            db.select().from(places),
+            db.select().from(hotels),
+        ]);
+    } catch (error) {
+        // The connection string is present but the database is unreachable —
+        // no Neon project, no network, or the tables have not been pushed yet.
+        // Report it rather than crashing the page.
+        return (
+            <div className="min-h-screen bg-cream px-16 py-16">
+                <h1 className="font-display text-3xl font-semibold mb-2">Admin</h1>
+                <p className="text-sm text-muted max-w-prose">
+                    Could not reach the database:{" "}
+                    {error instanceof Error ? error.message : String(error)}
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-cream px-16 py-16">

@@ -1,119 +1,192 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { eq } from "drizzle-orm";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import { db } from "@/db";
-import { places } from "@/db/schema";
+import { Navbar } from "@/components/travel/Navbar";
+import { Footer } from "@/components/travel/Footer";
+import { Eyebrow, SectionHeading, shell, sectionY } from "@/components/travel/Layout";
+import { DestinationCard } from "@/components/destinations/DestinationCard";
+import { destinations, interests } from "@/lib/data";
+import type { DestinationKind } from "@/lib/types";
 
-const FILTERS = ["All", "Lake", "Park", "Culture", "City"];
+/**
+ * The places directory.
+ *
+ * A filterable index over the editorial destination set — static data, filtered
+ * by `searchParams` on the server so the URL is shareable and the first paint
+ * is already correct. No pagination: the whole set is small enough to render,
+ * and a paginated directory of thirty places is worse than a long one.
+ */
+
+export const metadata: Metadata = {
+  title: "Places in Malawi — Lakes, Parks, Highlands, Culture",
+  description:
+    "Every destination we have documented in Malawi, from Cape Maclear and Liwonde to the highlands and the island shores — with stories, practical notes and verified coordinates.",
+  openGraph: {
+    title: "Places in Malawi",
+    description:
+      "Lakes, national parks, highlands and cultural sites across Malawi, with practical notes and verified coordinates.",
+    type: "website",
+  },
+};
+
+/** Only kinds that actually appear in the data get a chip. */
+function activeKinds(): DestinationKind[] {
+  const present = new Set(destinations.map((destination) => destination.kind));
+  return [...present].sort();
+}
+
+const KIND_LABEL: Record<DestinationKind, string> = {
+  lake: "Lakes & shores",
+  island: "Islands",
+  mountain: "Mountains",
+  park: "National parks",
+  reserve: "Reserves",
+  city: "Cities",
+  plateau: "Plateaus",
+  river: "Rivers",
+  cultural: "Cultural",
+};
 
 export default async function Places({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ kind?: string }>;
 }) {
-    const { category } = await searchParams;
-    const activeFilter = category ?? "All";
+  const { kind } = await searchParams;
+  const kinds = activeKinds();
 
-    const allPlaces =
-        activeFilter === "All"
-            ? await db.select().from(places)
-            : await db.select().from(places).where(eq(places.category, activeFilter));
+  // An unknown kind falls back to everything rather than 404-ing, so a stale or
+  // mistyped link still shows the directory.
+  const activeKind = kinds.includes(kind as DestinationKind)
+    ? (kind as DestinationKind)
+    : null;
 
-    return (
-        <div>
-            <Navbar />
+  const visible = activeKind
+    ? destinations.filter((destination) => destination.kind === activeKind)
+    : destinations;
 
-            <header className="px-16 pt-14 pb-8">
-                <h1 className="font-display text-4xl font-semibold">
-                    Places to Visit in Malawi
-                </h1>
-                <p className="text-base text-muted mt-3 max-w-[560px]">
-                    Browse lakes, parks and cultural sites, and add your favourites to a
-                    trip.
-                </p>
-            </header>
+  return (
+    <div>
+      <Navbar />
 
-            <div className="px-16 pb-8 flex gap-3">
-                {FILTERS.map((filter) => {
-                    const isActive = filter === activeFilter;
-                    const href = filter === "All" ? "/places" : `/places?category=${filter}`;
-                    return (
-                        <Link
-                            key={filter}
-                            href={href}
-                            className={
-                                isActive
-                                    ? "bg-teal text-white px-5 py-2.5 rounded-full text-sm font-semibold"
-                                    : "bg-white border border-sand text-ink px-5 py-2.5 rounded-full text-sm font-medium"
-                            }
-                        >
-                            {filter}
-                        </Link>
-                    );
-                })}
+      <main>
+        {/* ------------------------------------------------------- Hero band */}
+        <section className="border-b border-ink/10 bg-white">
+          <div className={`${shell} py-16 sm:py-20 lg:py-24`}>
+            <div className="max-w-3xl">
+              <Eyebrow className="block">The directory</Eyebrow>
+              <h1 className="mt-5 font-display text-[clamp(2.4rem,6.5vw,4.6rem)] font-semibold leading-[1.02] tracking-[-0.03em] text-ink text-balance">
+                Every place we have documented
+              </h1>
+              <p className="mt-6 text-[clamp(1rem,1.6vw,1.2rem)] leading-relaxed text-muted text-pretty">
+                {destinations.length} destinations across Malawi — the lake and its
+                islands, the parks, the highlands and the places where the culture
+                is the reason to come. Each one carries the story, the practical
+                notes, and a coordinate we can point at a source for.
+              </p>
             </div>
+          </div>
+        </section>
 
-            <section className="px-16 pb-6 grid grid-cols-3 gap-8">
-                {allPlaces.length === 0 ? (
-                    <p className="col-span-3 text-muted text-sm py-12 text-center">
-                        No places found in this category yet.
-                    </p>
-                ) : (
-                    allPlaces.map((place) => (
-                        <div
-                            key={place.id}
-                            className="bg-white border border-sand rounded-2xl overflow-hidden flex flex-col"
-                        >
-                            <div className="h-[180px] relative">
-                                {place.imageUrl ? (
-                                    <img
-                                        src={place.imageUrl}
-                                        alt={place.name}
-                                        className="h-full w-full object-cover"
-                                    />
-                                ) : (
-                                    <div
-                                        className="h-full w-full"
-                                        style={{
-                                            background:
-                                                "repeating-linear-gradient(45deg, #E8DCC8, #E8DCC8 10px, #ddcdb0 10px, #ddcdb0 20px)",
-                                        }}
-                                    />
-                                )}
-                                <span className="absolute top-3.5 left-3.5 bg-ink/75 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                                    {place.category}
-                                </span>
-                            </div>
-                            <div className="p-4.5 flex flex-col gap-1.5">
-                                <h3 className="font-display text-lg font-semibold">{place.name}</h3>
-                                <span className="text-[13px] text-muted">{place.region}</span>
-                                <p className="text-sm text-muted mt-1 leading-relaxed">{place.blurb}</p>
-                                <Link href={`/places/${place.slug}`} className="text-sm font-semibold mt-2">
-                                    View details →
-                                </Link>
-                            </div>
-                        </div>
-                    ))
-                )}
-            </section>
-
-            <div className="px-16 py-18 flex justify-center gap-2">
-                {[1, 2, 3].map((page) => (
-                    <span
-                        key={page}
-                        className={
-                            page === 1
-                                ? "w-9 h-9 rounded-[10px] bg-teal text-white flex items-center justify-center text-sm font-semibold"
-                                : "w-9 h-9 rounded-[10px] bg-white border border-sand flex items-center justify-center text-sm font-semibold"
-                        }
+        {/* -------------------------------------------------------- Filters */}
+        <section className={`${shell} py-10 sm:py-12`}>
+          <nav aria-label="Filter places by type">
+            <ul className="rail -mx-5 flex gap-3 px-5 sm:mx-0 sm:flex-wrap sm:px-0">
+              <li>
+                <Link
+                  href="/places"
+                  aria-current={activeKind ? undefined : "true"}
+                  className={
+                    activeKind
+                      ? "inline-flex rounded-full border border-ink/20 px-5 py-2.5 text-[14px] font-semibold text-ink transition-colors hover:border-ink"
+                      : "inline-flex rounded-full bg-ink px-5 py-2.5 text-[14px] font-semibold text-cream"
+                  }
+                >
+                  All
+                </Link>
+              </li>
+              {kinds.map((value) => {
+                const isActive = value === activeKind;
+                return (
+                  <li key={value}>
+                    <Link
+                      href={`/places?kind=${value}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className={
+                        isActive
+                          ? "inline-flex rounded-full bg-ink px-5 py-2.5 text-[14px] font-semibold text-cream"
+                          : "inline-flex rounded-full border border-ink/20 px-5 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-ink"
+                      }
                     >
-                        {page}
-                    </span>
-                ))}
-            </div>
+                      {KIND_LABEL[value]}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </section>
 
-            <Footer />
-        </div>
-    );
+        {/* ---------------------------------------------------------- Grid */}
+        <section className={`${shell} pb-20 sm:pb-28 lg:pb-36`}>
+          <h2 className="sr-only">
+            {activeKind
+              ? `${KIND_LABEL[activeKind]} in Malawi`
+              : "All destinations in Malawi"}
+          </h2>
+
+          {visible.length > 0 ? (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {visible.map((destination) => (
+                <DestinationCard
+                  key={destination.id}
+                  destination={destination}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="py-20 text-center text-[15px] text-muted">
+              Nothing recorded under this filter yet.
+            </p>
+          )}
+
+          <p className="mt-10 text-[13px] text-muted" aria-live="polite">
+            Showing {visible.length} of {destinations.length} places
+            {activeKind ? ` in ${KIND_LABEL[activeKind].toLowerCase()}` : ""}.
+          </p>
+        </section>
+
+        {/* ------------------------------------------------------ By interest */}
+        <section className={`${shell} ${sectionY} border-t border-ink/10`}>
+          <SectionHeading
+            eyebrow="Another way in"
+            title="Start from what you love doing"
+            intro="The same places, sorted by the trip you actually want — wildlife, water, food, romance, family."
+          />
+
+          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {interests.map((interest) => (
+              <li key={interest.id}>
+                <Link
+                  href={`/discover?interest=${interest.id}`}
+                  className="flex h-full flex-col rounded-2xl border border-ink/10 bg-white p-6 transition-colors hover:border-ember"
+                >
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ember">
+                    {interest.destinationIds.length} places
+                  </span>
+                  <span className="mt-3 font-display text-[20px] font-semibold text-ink">
+                    {interest.label}
+                  </span>
+                  <span className="mt-2 text-[14px] leading-relaxed text-muted text-pretty">
+                    {interest.tagline}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }

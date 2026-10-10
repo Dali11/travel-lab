@@ -1,0 +1,209 @@
+{
+  "_bbox": {
+    "sw": [
+      -17.2,
+      32.5
+    ],
+    "ne": [
+      -8.5,
+      36.1
+    ]
+  },
+  "_note": "Coordinates verified against the English Wikipedia API, which serves Wikidata property P625. Each entry records the Wikidata item id that confirmed it. Destinations absent from this file have no verified coordinate and are deliberately left off the map rather than placed at an approximation.",
+  "_airports": [
+    {
+      "id": "kamuzu-international-airport",
+      "name": "Kamuzu International Airport",
+      "lat": -13.7892,
+      "lng": 33.7808,
+      "source": "https://www.wikidata.org/wiki/Q721780"
+    },
+    {
+      "id": "chileka-international-airport",
+      "name": "Chileka International Airport",
+      "lat": -15.6811,
+      "lng": 34.9717,
+      "source": "https://www.wikidata.org/wiki/Q2670307"
+    }
+  ],
+  "cape-maclear": {
+    "id": "cape-maclear",
+    "name": "Cape Maclear",
+    "lat": -14.0167,
+    "lng": 34.85,
+    "elevationM": null,
+    "kind": "lake",
+    "source": "https://www.wikidata.org/wiki/Q2937250"
+  },
+  "lake-malawi-national-park": {
+    "id": "lake-malawi-national-park",
+    "name": "Lake Malawi National Park",
+    "lat": -14.0333,
+    "lng": 34.8833,
+    "elevationM": null,
+    "kind": "park",
+    "source": "https://www.wikidata.org/wiki/Q1077596"
+  },
+  "liwonde-national-park": {
+    "id": "liwonde-national-park",
+    "name": "Liwonde National Park",
+    "lat": -14.8333,
+    "lng": 35.3333,
+    "elevationM": null,
+    "kind": "reserve",
+    "source": "https://www.wikidata.org/wiki/Q2739189"
+  },
+  "mount-mulanje": {
+    "id": "mount-mulanje",
+    "name": "Mount Mulanje",
+    "lat": -15.9497,
+    "lng": 35.5936,
+    "elevationM": null,
+    "kind": "mountain",
+    "source": "https://www.wikidata.org/wiki/Q1510436"
+  },
+  "nyika-national-park": {
+    "id": "nyika-national-park",
+    "name": "Nyika National Park",
+    "lat": -10.6667,
+    "lng": 33.8333,
+    "elevationM": null,
+    "kind": "park",
+    "source": "https://www.wikidata.org/wiki/Q1567460"
+  },
+  "zomba-plateau": {
+    "id": "zomba-plateau",
+    "name": "Zomba Plateau",
+    "lat": -15.3272,
+    "lng": 35.3208,
+    "elevationM": null,
+    "kind": "plateau",
+    "source": "https://www.wikidata.org/wiki/Q8073720"
+  },
+  "likoma": {
+    "id": "likoma",
+    "name": "Likoma Island",
+    "lat": -12.0667,
+    "lng": 34.7333,
+    "elevationM": null,
+    "kind": "island",
+    "source": "https://www.wikidata.org/wiki/Q9135742"
+  },
+  "chizumulu": {
+    "id": "chizumulu",
+    "name": "Chizumulu Island",
+    "lat": -12.0167,
+    "lng": 34.6167,
+    "elevationM": null,
+    "kind": "island",
+    "source": "https://www.wikidata.org/wiki/Q182414"
+  },
+  "nkhata-bay": {
+    "id": "nkhata-bay",
+    "name": "Nkhata Bay",
+    "lat": -11.6,
+    "lng": 34.3,
+    "elevationM": null,
+    "kind": "lake",
+    "source": "https://www.wikidata.org/wiki/Q1370650"
+  },
+  "mangochi": {
+    "id": "mangochi",
+    "name": "Mangochi",
+    "lat": -14.4667,
+    "lng": 35.2667,
+    "elevationM": null,
+    "kind": "lake",
+    "source": "https://www.wikidata.org/wiki/Q1890257"
+  },
+  "monkey-bay": {
+    "id": "monkey-bay",
+    "name": "Monkey Bay",
+    "lat": -14.0833,
+    "lng": 34.9167,
+    "elevationM": null,
+    "kind": "lake",
+    "source": "https://www.wikidata.org/wiki/Q1944901"
+  },
+  "kasungu-national-park": {
+    "id": "kasungu-national-park",
+    "name": "Kasungu National Park",
+    "lat": -13.0,
+    "lng": 33.1667,
+    "elevationM": null,
+    "kind": "park",
+    "source": "https://www.wikidata.org/wiki/Q1735508"
+  },
+  "viphya": {
+    "id": "viphya",
+    "name": "Viphya Mountains",
+    "lat": -13.0647,
+    "lng": 34.1911,
+    "elevationM": null,
+    "kind": "plateau",
+    "source": "https://www.wikidata.org/wiki/Q477615"
+  },
+  "lilongwe": {
+    "id": "lilongwe",
+    "name": "Lilongwe",
+    "lat": -13.9864,
+    "lng": 33.7681,
+    "elevationM": null,
+    "kind": "city",
+    "source": "https://www.wikidata.org/wiki/Q3876"
+  },
+  "blantyre": {
+    "id": "blantyre",
+    "name": "Blantyre",
+    "lat": -15.7861,
+    "lng": 35.0058,
+    "elevationM": null,
+    "kind": "city",
+    "source": "https://www.wikidata.org/wiki/Q188693"
+  },
+  "salima": {
+    "id": "salima",
+    "name": "Salima, Malawi",
+    "lat": -13.7833,
+    "lng": 34.4333,
+    "elevationM": null,
+    "kind": "lake",
+    "source": "https://www.wikidata.org/wiki/Q979028"
+  },
+  "ntchisi": {
+    "id": "ntchisi",
+    "name": "Ntchisi",
+    "lat": -13.3667,
+    "lng": 34.0,
+    "elevationM": null,
+    "kind": "cultural",
+    "source": "https://www.wikidata.org/wiki/Q912391"
+  },
+  "dedza": {
+    "id": "dedza",
+    "name": "Dedza District",
+    "lat": -14.1667,
+    "lng": 34.3333,
+    "elevationM": null,
+    "kind": "cultural",
+    "source": "https://www.wikidata.org/wiki/Q667153"
+  },
+  "mzuzu": {
+    "id": "mzuzu",
+    "name": "Mzuzu",
+    "lat": -11.4581,
+    "lng": 34.0151,
+    "elevationM": null,
+    "kind": "city",
+    "source": "https://www.wikidata.org/wiki/Q502216"
+  },
+  "livingstonia": {
+    "id": "livingstonia",
+    "name": "Livingstonia",
+    "lat": -10.606,
+    "lng": 34.107,
+    "elevationM": null,
+    "kind": "cultural",
+    "source": "https://www.wikidata.org/wiki/Q502416"
+  }
+}

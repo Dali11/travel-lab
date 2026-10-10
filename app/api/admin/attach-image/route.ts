@@ -1,11 +1,18 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { db } from "@/db";
+import { getDb, isDbConfigured } from "@/db";
 import { places, hotels } from "@/db/schema";
 
 const TABLES = { place: places, hotel: hotels } as const;
 
 export async function PATCH(request: Request) {
+    if (!isDbConfigured()) {
+        return NextResponse.json(
+            { error: "DATABASE_URL is not set on this deployment." },
+            { status: 503 },
+        );
+    }
+
     const { type, slug, imageUrl } = await request.json();
 
     if (!(type in TABLES)) {
@@ -16,7 +23,7 @@ export async function PATCH(request: Request) {
     }
 
     const table = TABLES[type as keyof typeof TABLES];
-    const result = await db
+    const result = await getDb()
         .update(table)
         .set({ imageUrl })
         .where(eq(table.slug, slug))

@@ -1,18 +1,200 @@
 @import "tailwindcss";
 
+/*
+ * Travel Lab design system.
+ *
+ * Direction: cinematic, editorial, premium, Malawian. Photography dominates;
+ * the UI is quiet around it. The old palette was a warm-sand Bootstrap-ish
+ * cream — this deepens it into lake teal, deep water, warm sand and a single
+ * ember accent, with a true black used only behind immersive media.
+ */
+
 @theme {
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-karla);
 
-  --color-ink: #1C2521;
-  --color-muted: #5B655F;
-  --color-cream: #FBF6EE;
-  --color-terracotta: #D97742;
-  --color-teal: #1F6F5C;
-  --color-sand: #E8DCC8;
+  /* Core ink */
+  --color-ink: #10100E;
+  --color-ink-soft: #2A2A25;
+  --color-muted: #6B6B60;
+
+  /* Lake + water */
+  --color-lake: #0B6E7A;
+  --color-lake-deep: #063E48;
+  --color-lake-pale: #CFE6E4;
+
+  /* Land */
+  --color-sand: #E7DCC6;
+  --color-sand-deep: #D3C3A4;
+  --color-cream: #F8F4EC;
+
+  /* Vegetation / earth */
+  --color-forest: #2F5D43;
+  --color-clay: #A9603C;
+
+  /* Single warm accent */
+  --color-ember: #E2703A;
+  --color-ember-soft: #F2A878;
+
+  --color-line: rgba(16, 16, 14, 0.12);
 }
 
-body {
-  background: var(--color-cream);
-  color: var(--color-ink);
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchor jumps so the fixed header never covers a heading. */
+    scroll-padding-top: 88px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-ember);
+    color: #fff;
+  }
+
+  /* Visible focus for keyboard users only — premium sites still need this. */
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Editorial eyebrow — small caps label above a heading. */
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ember);
+  }
+
+  /* Cinematic media frame: the single card treatment used across the site. */
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    background: var(--color-ink-soft);
+    isolation: isolate;
+  }
+
+  /* Zoom-on-hover for photography. Opt-in, never on touch devices. */
+  .media-frame img {
+    transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .media-zoom:hover img {
+      transform: scale(1.06);
+    }
+  }
+
+  /* Horizontal scroll rail: snap + hide scrollbar, used on mobile and desktop. */
+  .rail {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+
+  /* Fine hairline rule */
+  .rule {
+    border-top: 1px solid var(--color-line);
+  }
+}
+
+@layer utilities {
+  /* Cinematic entrance. Applied to hero lines with staggered delays. */
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  .animate-rise {
+    animation: rise-in 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .animate-fade {
+    animation: fade-in 1400ms ease both;
+  }
+
+  /* Slow cinematic drift over hero media. */
+  @keyframes ken-burns {
+    from {
+      transform: scale(1.06) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.16) translate3d(0, -2%, 0);
+    }
+  }
+  .animate-drift {
+    animation: ken-burns 26s ease-in-out infinite alternate;
+  }
+
+  /* Bottom scrim so white type stays legible over any photograph. */
+  .scrim-b {
+    background: linear-gradient(
+      to top,
+      rgba(6, 10, 12, 0.82) 0%,
+      rgba(6, 10, 12, 0.45) 32%,
+      rgba(6, 10, 12, 0.08) 62%,
+      transparent 100%
+    );
+  }
+  .scrim-l {
+    background: linear-gradient(
+      to right,
+      rgba(6, 10, 12, 0.8) 0%,
+      rgba(6, 10, 12, 0.35) 40%,
+      transparent 75%
+    );
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
 }

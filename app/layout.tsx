@@ -1,22 +1,74 @@
-import type { Metadata } from "next";
-import { Fraunces, Karla } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["500", "600", "700"],
-});
+/**
+ * Root layout.
+ *
+ * Typography: Fraunces for editorial display, Karla for UI. Both are loaded
+ * through next/font so they are self-hosted, subset to latin, and served with
+ * `font-display: swap` — no render-blocking request to Google.
+ */
 
-const karla = Karla({
-  subsets: ["latin"],
-  variable: "--font-karla",
-  weight: ["400", "500", "600", "700"],
-});
+
+
+const SITE_URL = process.env.SITE_URL ?? "https://travel-lab.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Travel Lab — Discover Malawi",
-  description: "Plan flights, stays and places to visit across Malawi.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Discover Malawi — Travel Lab",
+    template: "%s · Travel Lab",
+  },
+  description:
+    "The digital gateway for discovering, planning and experiencing Malawi. Destinations, experiences, an interactive 3D map of the country, and a trip builder that plans a route you can actually drive.",
+  applicationName: "Travel Lab",
+  keywords: [
+    "Malawi travel",
+    "visit Malawi",
+    "things to do in Malawi",
+    "Lake Malawi",
+    "Cape Maclear",
+    "Mount Mulanje",
+    "Liwonde National Park",
+    "Nyika National Park",
+    "Malawi safari",
+    "Malawi travel itinerary",
+    "hotels in Malawi",
+    "Malawi lodges",
+  ],
+  authors: [{ name: "Travel Lab" }],
+  creator: "Travel Lab",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Travel Lab",
+    locale: "en_GB",
+    url: SITE_URL,
+    title: "Discover Malawi — Travel Lab",
+    description:
+      "One country. A thousand ways to experience it. Destinations, experiences, a 3D map, and a trip builder that plans a route you can actually drive.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Discover Malawi — Travel Lab",
+    description:
+      "One country. A thousand ways to experience it. Destinations, experiences, a 3D map, and a real trip planner.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#10100E",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
+  // The mobile tab bar is fixed; this keeps the last content clear of it.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -25,8 +77,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${fraunces.variable} ${karla.variable} font-sans antialiased`}>
+    <html lang="en-GB">
+      <body
+        className="font-sans antialiased bg-cream text-ink"
+      >
+        {/*
+          Skip link. The first thing in the tab order on every page, invisible
+          until focused. A premium site still has to be navigable by keyboard.
+        */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-6 focus:py-3 focus:text-[14px] focus:font-semibold focus:text-cream"
+        >
+          Skip to content
+        </a>
         {children}
       </body>
     </html>
