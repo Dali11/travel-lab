@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Reveal } from "../travel/Reveal";
-import { SectionHeading, shell, sectionY } from "../travel/Layout";
-import { DestinationFeature, DestinationRailCard } from "../destinations/DestinationCard";
+import { shell } from "../travel/Layout";
+import { DestinationCompactCard, DestinationRailCard } from "../destinations/DestinationCard";
 import { destinations } from "@/lib/data";
 
 /**
@@ -17,6 +17,7 @@ const showcaseIds = [
   "cape-maclear",
   "liwonde-national-park",
   "mount-mulanje",
+  "zomba-plateau",
 ];
 
 const railIds = [
@@ -46,57 +47,46 @@ export function DestinationShowcase() {
   return (
     <section
       id="places"
-      className={`${shell} ${sectionY} bg-cream`}
+      className={`${shell} bg-cream py-8 sm:py-10 lg:py-12`}
       aria-labelledby="places-title"
     >
       <Reveal>
-        <SectionHeading
-          eyebrow="Places you'll remember"
-          title="The ones that end up on the camera roll"
-          intro="Lake water you can see the bottom of, elephants on a river at dawn, and a granite mountain that makes people cry. Three places, and the rest of the country."
-        />
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-ember">
+              Discover Malawi
+            </p>
+            <h2 id="places-title" className="font-display text-[clamp(1.55rem,2.5vw,2rem)] font-semibold leading-tight tracking-[-0.03em] text-ink">
+              Top destinations
+            </h2>
+            <p className="mt-1 text-[12px] leading-relaxed text-muted">
+              Iconic places, hidden gems and unforgettable landscapes.
+            </p>
+          </div>
+          <Link href="/places" className="mb-1 shrink-0 text-[11px] font-semibold text-ember hover:underline">
+            View all destinations →
+          </Link>
+        </div>
       </Reveal>
 
-      {/* Desktop: asymmetric two-column features */}
-      <div className="mt-14 lg:mt-20 hidden lg:grid lg:grid-cols-2 gap-4">
+      {/* Desktop: compact photographic cards with captions underneath */}
+      <div className="mt-4 hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4">
         {showcase.map((destination, index) => (
-          <Reveal key={destination.id} delay={index * 110}>
-            <DestinationFeature destination={destination} priority={index < 2} />
+          <Reveal key={destination.id} delay={index * 70}>
+            <DestinationCompactCard destination={destination} priority={index < 4} />
           </Reveal>
         ))}
       </div>
 
-      {/* Mobile: swipe rail */}
-      <Reveal className="mt-8 lg:hidden">
-        <div className="rail -mx-5 px-5">
-          {showcase.map((destination) => (
-            <div key={destination.id} className="w-[82vw] max-w-[380px]">
-              <DestinationRailCard destination={destination} />
-            </div>
-          ))}
-        </div>
-      </Reveal>
+      {/* Mobile: compact two-column destination cards */}
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:hidden">
+        {showcase.map((destination, index) => (
+          <Reveal key={destination.id} delay={index * 60}>
+            <DestinationCompactCard destination={destination} priority={index < 2} />
+          </Reveal>
+        ))}
+      </div>
 
-      {/* Everything else */}
-      <Reveal className="mt-10 lg:mt-24">
-        <div className="flex items-baseline justify-between gap-6 mb-6">
-          <h3 className="font-display text-[clamp(1.4rem,2.6vw,1.9rem)] font-semibold tracking-[-0.02em]">
-            And the rest of the country
-          </h3>
-          <Link
-            href="/places"
-            className="shrink-0 text-[14px] font-semibold text-ink/60 hover:text-ink transition-colors"
-          >
-            All {destinations.length} →
-          </Link>
-        </div>
-
-        <div className="rail pb-3">
-          {rail.map((destination) => (
-            <DestinationRailCard key={destination.id} destination={destination} />
-          ))}
-        </div>
-      </Reveal>
     </section>
   );
 }

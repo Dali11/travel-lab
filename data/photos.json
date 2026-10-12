@@ -102,8 +102,8 @@
     "attributionUrl": ""
   },
   "lake-malawi-national-park": {
-    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/golden-sunset.jpeg",
-    "credit": "Golden sunset over Lake Malawi",
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/Golden%20Sunset%20Fishing%20Boats.png",
+    "credit": "Golden sunset fishing boats on Lake Malawi",
     "license": "Verify commercial usage rights before publishing",
     "attributionUrl": ""
   },
@@ -270,7 +270,31 @@
     "attributionUrl": ""
   },
   "zomba-plateau": {
-    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/Mount%20Mulanje%20Cultural%20Landscape.jpeg",
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/zomba-plateau.jpeg",
+    "credit": "Travel Lab Neon Storage",
+    "license": "Confirm usage rights for uploaded photograph",
+    "attributionUrl": ""
+  },
+  "pumulani-lodge": {
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/pumulani-lodge1.jpeg",
+    "credit": "Travel Lab Neon Storage",
+    "license": "Confirm usage rights for uploaded photograph",
+    "attributionUrl": ""
+  },
+  "likoma-island-lodge": {
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/likoma-island.jpeg",
+    "credit": "Travel Lab Neon Storage",
+    "license": "Confirm usage rights for uploaded photograph",
+    "attributionUrl": ""
+  },
+  "mvuu-lodge": {
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/Mvuu%20Lodge.jpeg",
+    "credit": "Travel Lab Neon Storage",
+    "license": "Confirm usage rights for uploaded photograph",
+    "attributionUrl": ""
+  },
+  "kumbali-island-stay": {
+    "url": "https://br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech/travel-images/Cape_McLear%2C_Malawi_%282498445835%29.jpeg",
     "credit": "Travel Lab Neon Storage",
     "license": "Confirm usage rights for uploaded photograph",
     "attributionUrl": ""

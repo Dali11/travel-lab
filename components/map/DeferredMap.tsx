@@ -25,8 +25,8 @@ const LazyMap = dynamic(() => import("./MalawiMap"), {
 function MapPlaceholder({ height }: { height: number }) {
   return (
     <div
-      className="w-full rounded-3xl bg-lake-deep grid place-items-center"
-      style={{ height }}
+      className="w-full rounded-2xl sm:rounded-3xl bg-lake-deep grid place-items-center"
+      style={{ height: `clamp(360px, ${height}px, 620px)` }}
       aria-hidden="true"
     >
       <div className="text-center">

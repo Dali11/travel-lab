@@ -43,7 +43,7 @@
   html {
     scroll-behavior: smooth;
     /* Offset anchor jumps so the fixed header never covers a heading. */
-    scroll-padding-top: 88px;
+    scroll-padding-top: 104px;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -196,5 +196,22 @@
   }
   .text-pretty {
     text-wrap: pretty;
+  }
+}
+
+/* Travel Lab Explore map: compact and responsive. */
+.map-responsive-frame > div {
+  height: clamp(360px, 55vw, 560px) !important;
+}
+
+@media (min-width: 640px) {
+  .map-responsive-frame > div {
+    height: 460px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .map-responsive-frame > div {
+    height: 520px !important;
   }
 }

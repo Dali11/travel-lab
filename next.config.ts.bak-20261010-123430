@@ -1,0 +1,47 @@
+import type { NextConfig } from "next";
+
+/**
+ * Remote image hosts.
+ *
+ * `next/image` requires an allowlist before it will optimise a remote URL. The
+ * photograph manifest (data/photos.json) currently resolves to Wikimedia
+ * Commons and Unsplash; Vercel Blob is still permitted for operator uploads.
+ *
+ * If the manifest is later moved to a CMS or CDN, add that hostname here and
+ * nothing else in the app needs to change — components/travel/Photo.tsx is the
+ * only place that renders a remote image, and it validates against the same
+ * list.
+ */
+const remotePatterns = [
+  // Wikimedia Commons is the photograph manifest's only source. Thumbnails are
+  // rewritten to this canonical host in data/photos.json, so no CDN alias is
+  // needed here.
+  { protocol: "https" as const, hostname: "upload.wikimedia.org" },
+  { protocol: "https" as const, hostname: "images.unsplash.com" },
+  { protocol: "https" as const, hostname: "*.public.blob.vercel-storage.com" },
+  { protocol: "https" as const, hostname: "br-morning-resonance-b9ys3mbr.storage.c-7.eu-central-1.aws.neon.tech" },
+];
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns,
+    // WebP everywhere. Every photograph on this site is a large landscape
+    // image, so AVIF would be nice but WebP is the safe floor across browsers.
+    formats: ["image/webp"],
+    // The photographs are Wikimedia Commons originals, most of them well over a
+    // megabyte. Left at the defaults, next/image asks the optimiser for widths
+    // up to 3840px, which means fetching and re-encoding the full-size file
+    // through a slow upstream on a cold cache — that request reliably times out
+    // and returns a 500, which drops the photograph back to its colour field.
+    //
+    // Capping the largest request at 1600px is above the widest layout slot in
+    // the app (a full-bleed hero at 1440px viewport) and keeps every fetch to a
+    // bounded amount of upstream data. The trade-off is that a photograph is
+    // never served larger than 1600px, which on a 2x display is soft rather
+    // than absent.
+    deviceSizes: [640, 750, 1080, 1200, 1600],
+    imageSizes: [64, 96, 128, 256, 384],
+  },
+};
+
+export default nextConfig;

@@ -83,6 +83,43 @@ export function DestinationFeature({
   );
 }
 
+/** Compact editorial card matching the homepage reference. */
+export function DestinationCompactCard({
+  destination,
+  photoSrc,
+  priority = false,
+}: {
+  destination: Destination;
+  photoSrc?: string | null;
+  priority?: boolean;
+}) {
+  return (
+    <Link
+      href={`/places/${destination.slug}`}
+      className="group block min-w-0"
+    >
+      <div className="media-frame media-zoom relative h-[150px] overflow-hidden rounded-lg sm:h-[170px] lg:h-[150px] xl:h-[165px]">
+        <Photo
+          photoKey={destination.photo}
+          src={photoSrc}
+          alt={destination.name}
+          seed={destination.id}
+          priority={priority}
+          sizes="(max-width: 640px) 68vw, (max-width: 1024px) 45vw, 25vw"
+        />
+      </div>
+      <div className="pt-1.5">
+        <h3 className="text-[12px] font-bold leading-snug text-ink transition-colors group-hover:text-ember">
+          {destination.name}
+        </h3>
+        <p className="mt-0.5 line-clamp-1 text-[10px] leading-snug text-muted">
+          {destination.essence}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 /** Standard grid card. */
 export function DestinationCard({
   destination,
@@ -135,7 +172,7 @@ export function DestinationRailCard({
   return (
     <Link
       href={`/places/${destination.slug}`}
-      className="media-frame media-zoom group relative block w-[248px] sm:w-[288px] h-[340px] rounded-2xl"
+      className="media-frame media-zoom group relative block w-[68vw] max-w-[270px] sm:w-[288px] h-[240px] sm:h-[280px] rounded-xl"
     >
       <Photo
         photoKey={destination.photo}

@@ -167,9 +167,9 @@ const MalawiMapImpl = forwardRef<MalawiMapHandle, MalawiMapProps>(function Malaw
           container: containerRef.current,
           style: "mapbox://styles/mapbox/satellite-streets-v12",
           center: centre,
-          zoom: 6.5,
-          pitch: 62,
-          bearing: -15,
+          zoom: 6.8,
+          pitch: 52,
+          bearing: -12,
           attributionControl: false,
           // Malawi has no fog or heavy weather in most of the year; keep it clean.
           maxPitch: 75,

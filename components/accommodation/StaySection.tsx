@@ -72,12 +72,6 @@ export function StaySection() {
                   {stay.blurb}
                 </p>
 
-                <div className="mt-5 flex items-baseline gap-2">
-                  <span className="text-[22px] font-bold text-white tabular-nums">
-                    ${stay.pricePerNightUsd}
-                  </span>
-                  <span className="text-[12px] text-white/55">/ night, indicative</span>
-                </div>
               </div>
             </Link>
           </Reveal>
@@ -121,11 +115,7 @@ export function StaySection() {
                   <p className="mt-0.5 text-[12px] text-ink/45 truncate">
                     {stay.category} · {stay.location}
                   </p>
-                  <div className="mt-1.5 flex items-baseline justify-between gap-2">
-                    <span className="text-[14px] font-bold tabular-nums">
-                      ${stay.pricePerNightUsd}
-                      <span className="text-ink/40 font-normal text-[11px]"> /night</span>
-                    </span>
+                  <div className="mt-1.5">
                     <Stars rating={stay.rating / 10} />
                   </div>
                 </div>

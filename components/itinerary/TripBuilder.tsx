@@ -191,7 +191,7 @@ function TripForm({
 }) {
   return (
     <form
-      className="space-y-7"
+      className="mx-auto w-full max-w-3xl space-y-5 sm:space-y-6"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
@@ -205,7 +205,7 @@ function TripForm({
         <legend className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink/40 mb-3">
           Month
         </legend>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid grid-cols-4 gap-2">
           {months.map((month, index) => (
             <button
               key={month}
@@ -255,7 +255,7 @@ function TripForm({
         <legend className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink/40 mb-3">
           Travelling as?
         </legend>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           {tripParties.map((party) => (
             <button
               key={party.id}
@@ -330,7 +330,7 @@ function TripForm({
 
       <button
         type="submit"
-        className="mt-8 w-full inline-flex items-center justify-center gap-3 rounded-full bg-ink text-cream py-4 text-[15px] font-bold tracking-wide transition-all duration-400 hover:bg-lake-deep hover:gap-4"
+        className="mt-5 w-full inline-flex items-center justify-center gap-3 rounded-full bg-ink text-cream py-3.5 text-[14px] font-bold tracking-wide transition-all duration-300 hover:bg-lake-deep hover:gap-4"
       >
         Create my journey
         <svg
@@ -349,7 +349,7 @@ function TripForm({
 
       <p className="text-[12px] text-ink/40 leading-relaxed">
         Planning figures only. Excludes international flights, visas, travel
-        insurance and park entry fees. Nothing on Travel Lab is bookable.
+        insurance and park entry fees. Final prices and availability must be confirmed before a booking is finalised.
       </p>
     </form>
   );
@@ -509,11 +509,36 @@ export function TripBuilder({ geo }: { geo: GeoContext }) {
     return interest?.label ?? id;
   }).join(" · ");
 
+  const startBooking = () => {
+    const draft = {
+      request,
+      trip: {
+        title: "Your Malawi adventure",
+        days: totalDays,
+        travellers: request.travellers,
+        interests: interestsLabel,
+        estimatedTotalUsd: estimate.totalUsd,
+        routeKm,
+        destinations: displayed.map((stop) => ({
+          id: stop.destinationId,
+          name: stop.destinationName,
+          day: stop.day,
+          reason: stop.reason,
+        })),
+        arrivalAirport: itinerary.gates.arrive,
+        warnings: itinerary.warnings,
+      },
+    };
+
+    window.sessionStorage.setItem("travel-lab-booking-draft", JSON.stringify(draft));
+    window.location.href = "/book";
+  };
+
   return (
     <div className="flex flex-col">
       {/* ============================================================ Header */}
       {generated && (
-        <header className="rounded-3xl bg-ink text-white border border-ink/12 overflow-hidden">
+        <header className="order-5 sm:order-none rounded-3xl bg-ink text-white border border-ink/12 overflow-hidden">
           <div className="h-full grid grid-cols-1 sm:grid-cols-2 gap-8 p-6 sm:p-8 lg:p-10">
             {/* Left: trip summary. */}
             <div>
@@ -609,6 +634,19 @@ export function TripBuilder({ geo }: { geo: GeoContext }) {
                   Regenerate
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={startBooking}
+                className="mt-3 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ember px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-ember/90"
+              >
+                Book This Trip
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+              <p className="mt-2 text-center text-xs leading-relaxed text-white/45">
+                Request your booking first. We will confirm availability and the final price before payment.
+              </p>
             </div>
           </div>
         </header>
@@ -717,16 +755,6 @@ export function TripBuilder({ geo }: { geo: GeoContext }) {
           )}
         </div>
 
-        {/* Compact map, beneath the itinerary. */}
-        <div className="mt-6 rounded-3xl border border-ink/8 overflow-hidden bg-cream">
-          <DeferredMap
-            geojson={geojson}
-            bbox={bbox}
-            height={Math.min(320, mapHeight)}
-            route={route}
-            onSelectDestination={selectOnMap}
-          />
-        </div>
       </div>
 
       {/* Route overview / trip summary (mobile only). */}
@@ -799,18 +827,6 @@ export function TripBuilder({ geo }: { geo: GeoContext }) {
         </div>
       )}
 
-      {/* The 3D map, beneath the itinerary. Selecting a day flies the camera to
-          the destination; selecting a destination on the map highlights the
-          matching day. */}
-      <div className="mt-6 rounded-3xl border border-ink/8 overflow-hidden bg-cream">
-        <DeferredMap
-          geojson={geojson}
-          bbox={bbox}
-          height={mapHeight}
-          route={route}
-          onSelectDestination={selectOnMap}
-        />
-      </div>
     </div>
   );
 }

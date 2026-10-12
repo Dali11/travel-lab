@@ -16,7 +16,7 @@ import { experiences } from "@/lib/data/experiences";
  * label sits on the card, not in a footer.
  */
 
-const featured = experiences.slice(0, 5);
+const featured = experiences.slice(0, 4);
 
 const categoryLabel: Record<string, string> = {
   wildlife: "Wildlife",
@@ -33,10 +33,10 @@ export function ExperienceSection() {
   return (
     <section
       id="experiences"
-      className={`${shell} ${sectionY} bg-cream`}
+      className={`${shell} bg-cream py-5 sm:py-7 lg:py-8`}
       aria-labelledby="experiences-title"
     >
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+      <div className="flex flex-col gap-3">
         <SectionHeading
           eyebrow="Experiences"
           title="Experiences, not just places."
@@ -46,19 +46,16 @@ export function ExperienceSection() {
       </div>
 
       {/* Five visible featured experiences. */}
-      <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-4">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 lg:mt-5 lg:grid-cols-4 lg:gap-4">
         {featured.map((experience, index) => {
           const span = "";
-          const height =
-            index === 0
-              ? "h-[230px] sm:h-[280px] lg:h-[300px]"
-              : "h-[230px] sm:h-[280px] lg:h-[300px]";
+          const height = "h-[190px] sm:h-[220px] lg:h-[180px] xl:h-[200px]";
 
           return (
             <div key={experience.id} className={span}>
               <Link
                 href={`/experiences/${experience.slug}`}
-                className={`media-frame media-zoom group relative block w-full rounded-2xl lg:rounded-3xl ${height}`} style={{ height: index === 0 ? "230px" : "230px" }}
+                className={`media-frame media-zoom group relative block w-full rounded-2xl lg:rounded-3xl ${height}`} 
               >
                 <Photo
                   photoKey={experience.photo}
@@ -67,8 +64,8 @@ export function ExperienceSection() {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className="scrim-b absolute inset-0" aria-hidden="true" />
-                <div className="absolute inset-x-0 bottom-0 p-5 lg:p-7">
-                  <div className="mb-3 flex items-center gap-2.5">
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 lg:p-4">
+                  <div className="mb-2 flex flex-wrap items-center gap-1.5">
                     <span className="rounded-full border border-white/20 bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/90 backdrop-blur-md">
                       {categoryLabel[experience.category]}
                     </span>
@@ -77,15 +74,11 @@ export function ExperienceSection() {
                     </span>
                   </div>
                   <h3 className={`font-display font-semibold leading-[1.05] tracking-[-0.02em] text-pretty text-white ${
-                    index === 0 ? "text-[26px] lg:text-[38px]" : "text-[22px] lg:text-[25px]"
+                    "text-[16px] sm:text-[18px] lg:text-[17px] xl:text-[19px]"
                   }`}>
                     {experience.title}
                   </h3>
-                  {index === 0 && (
-                    <p className="mt-3 max-w-[42ch] text-[14px] leading-relaxed text-white/75 text-pretty">
-                      {experience.summary}
-                    </p>
-                  )}
+
                 </div>
               </Link>
             </div>
@@ -93,7 +86,7 @@ export function ExperienceSection() {
         })}
       </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         <Link
           href="/experiences"
           className="inline-flex items-center gap-2 text-[14px] font-semibold text-ink hover:text-ember transition-colors"

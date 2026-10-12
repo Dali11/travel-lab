@@ -20,27 +20,27 @@ export function MapSection() {
   return (
     <section
       id="map"
-      className={`${shell} ${sectionY} bg-ink text-white`}
+      className={`${shell} scroll-mt-24 bg-[#F8F4EC] py-6 text-[#10100E] sm:py-8 lg:py-10`}
       aria-labelledby="map-title"
     >
       <Reveal>
         <SectionHeading
-          eyebrow="Interactive map"
-          title="Explore Malawi geographically"
-          intro="Not a list with pins. Real terrain, real relief, and a camera that moves the way a plane would. Select a place and the country tilts into focus."
-          tone="light"
+          eyebrow="Explore Malawi"
+          title="Find your place on the map"
+          intro="Discover lakeshores, wildlife reserves, mountain trails and hidden places across Malawi."
+
         />
       </Reveal>
 
-      <Reveal delay={120} className="mt-12 lg:mt-16">
-        <DeferredMap geojson={collection} bbox={malawiBbox} height={620} />
+      <Reveal delay={120} className="mt-4 overflow-hidden rounded-2xl lg:mt-5">
+        <DeferredMap geojson={collection} bbox={malawiBbox} height={620} className="map-responsive-frame" />
       </Reveal>
 
       {/* Honest note about what is and is not plotted. */}
-      <Reveal delay={200} className="mt-8">
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-[13px] text-white/45 border-t border-white/10 pt-7">
+      <Reveal delay={200} className="mt-5">
+        <div className="flex flex-col gap-4 border-t border-black/10 pt-5 text-[12px] leading-relaxed text-black/55 sm:flex-row sm:gap-10">
           <p className="max-w-md leading-relaxed">
-            <strong className="text-white/70 font-semibold">
+            <strong className="font-semibold text-black/80">
               {geoDestinations.length} destinations plotted.
             </strong>{" "}
             Every coordinate here was verified against Wikipedia, Wikidata or GeoNames,
@@ -50,7 +50,7 @@ export function MapSection() {
 
           {unlocatedDestinations.length > 0 && (
             <p className="max-w-md leading-relaxed">
-              <strong className="text-white/70 font-semibold">
+              <strong className="font-semibold text-black/80">
                 {unlocatedDestinations.length} more{" "}
                 {unlocatedDestinations.length === 1 ? "place is" : "places are"} written
                 up but not plotted

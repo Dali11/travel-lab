@@ -1,0 +1,64 @@
+
+> travel_lab@0.1.0 build
+> next build
+
+▲ Next.js 16.3.6 (Turbopack)
+- Environments: .env.local
+⚠ Warning: Next.js ignored package-lock.json in /home/i9i because it is outside the current Git repository (/home/i9i/Buy Me Coffee/travel-lab).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+✓ Running next.config.ts took 29ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 35.0s
+  Running TypeScript ...
+  Finished TypeScript in 4.5s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/80) ...
+  Generating static pages using 3 workers (20/80) 
+  Generating static pages using 3 workers (40/80) 
+  Generating static pages using 3 workers (60/80) 
+✓ Generating static pages using 3 workers (80/80) in 2.9s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /admin
+├ ƒ /admin/places/[slug]/photo
+├ ƒ /admin/upload/[type]/[slug]
+├ ƒ /api/admin/attach-image
+├ ƒ /api/upload
+├ ○ /contact
+├ ƒ /discover
+├ ○ /experiences
+├   /experiences/[slug]
+│ ├ ● /experiences/sunset-over-lake-malawi
+│ ├ ● /experiences/boat-safari-on-the-shire
+│ ├ ● /experiences/track-elephants-on-foot
+│ └ ● [+18 more paths]
+├ ○ /flights
+├ ○ /guide
+├ ƒ /hotels
+├   /hotels/[slug]
+│ ├ ● /hotels/pumulani-lodge
+│ ├ ● /hotels/cape-maclear-inn
+│ ├ ● /hotels/likoma-island-lodge
+│ └ ● [+13 more paths]
+├ ○ /map
+├ ƒ /places
+├   /places/[slug]
+│ ├ ● /places/cape-maclear
+│ ├ ● /places/lake-malawi-national-park
+│ ├ ● /places/liwonde-national-park
+│ └ ● [+23 more paths]
+├ ○ /plan
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

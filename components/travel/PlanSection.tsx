@@ -23,13 +23,13 @@ export function PlanSection() {
     >
       <Reveal>
         <SectionHeading
-          eyebrow="Build your trip"
-          title="Tell us the trip. We'll build the route."
-          intro="Malawi is 900 kilometres long with a great deal of unpaved road. An itinerary that zig-zags across it wastes days. This one scores destinations against what you actually care about, then solves the route so it never doubles back."
+          eyebrow="Your journey, your way"
+          title="Your Malawi adventure starts here."
+          intro="Tell us when you're coming, what you love and how long you have. We'll shape a day-by-day journey around Malawi's lakeshores, wild places, mountain trails and local culture—without wasting precious days doubling back."
         />
       </Reveal>
 
-      <Reveal delay={120} className="mt-12 lg:mt-16">
+      <Reveal delay={120} className="mt-7 lg:mt-10">
         <TripBuilder geo={geo} />
       </Reveal>
     </section>

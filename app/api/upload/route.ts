@@ -1,6 +1,9 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
+import { getAdminIdentity } from "@/lib/auth";
+import { getDb } from "@/db";
+import { media } from "@/db/schema";
 
 export const runtime = "nodejs";
 
@@ -11,6 +14,11 @@ const allowedTypes: Record<string, string> = {
 };
 
 export async function POST(request: Request) {
+  const identity = await getAdminIdentity(request.headers.get("cookie") ?? "");
+  if (!identity) {
+    return NextResponse.json({ error: "Authentication required." }, { status: 401 });
+  }
+
   const endpoint = process.env.AWS_ENDPOINT_URL_S3;
   const region = process.env.AWS_REGION;
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
@@ -70,6 +78,22 @@ export async function POST(request: Request) {
     const imageUrl =
       `${baseUrl}/${encodeURIComponent(bucket)}/` +
       key.split("/").map(encodeURIComponent).join("/");
+
+    try {
+      await getDb().insert(media).values({
+        storageKey: key,
+        originalName: file.name,
+        url: imageUrl,
+        mimeType: file.type,
+        sizeBytes: file.size,
+        uploadedAt: new Date(),
+      });
+    } catch {
+      return NextResponse.json(
+        { error: "Image uploaded but could not be recorded in the database." },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({ url: imageUrl });
   } catch (error) {

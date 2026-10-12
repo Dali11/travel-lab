@@ -71,9 +71,9 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
-        <InterestGrid />
         <DestinationShowcase />
         <ExperienceSection />
+        <InterestGrid />
         <MapSection />
         <PlanSection />
         <GettingThereSection />

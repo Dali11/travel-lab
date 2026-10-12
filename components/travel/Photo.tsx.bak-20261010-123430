@@ -1,0 +1,190 @@
+import { photoFor } from "@/lib/data/manifest";
+import { ResilientImage } from "./ResilientImage";
+
+/**
+ * The photograph.
+ *
+ * One component owns every image on the site, because three rules apply
+ * everywhere and are easy to get wrong when done per-component:
+ *
+ *   1. A remote host must be allow-listed in next.config.ts. Photographs come
+ *      from several origins (Wikimedia Commons today, a CDN later), so they are
+ *      routed through this one component rather than the optimiser directly.
+ *      Nothing else in the app may hard-code a remote URL.
+ *   2. When an image fails — and it does, because a third-party CDN will
+ *      occasionally time out — this renders a designed colour field rather than
+ *      an empty frame. A blank card reads as a broken website; a colour field
+ *      reads as a deliberate image treatment.
+ *   3. Never invent an image URL. If no verified photograph exists, the
+ *      fallback is generated from the entry name.
+ *
+ * NOTE ON THE MANIFEST IMPORT: this module reads `data/photos.json`. The lookup
+ * comes from `./manifest`, NOT from `@/lib/data` — `lib/data/index.ts` also
+ * reads `data/destinations.json` through `node:fs`, and importing that from a
+ * client component drags `node:fs` into the browser bundle and breaks the
+ * Turbopack build. Keep this import narrow.
+ *
+ * Deterministic colour from a string: same entry, same field, every render and
+ * every server, so there is no hydration mismatch.
+ */
+
+type PhotoProps = {
+  /** Key into data/photos.json. */
+  photoKey?: string;
+  /** Direct URL. Takes precedence over photoKey when the DB supplies one. */
+  src?: string | null;
+  alt: string;
+  /** Used to derive the fallback colour field when no image resolves. */
+  seed?: string;
+  className?: string;
+  sizes?: string;
+  priority?: boolean;
+  /** Fallback field brightness — hero fields are darker than card fields. */
+  fallbackTone?: "deep" | "mid" | "light";
+};
+
+const remotePatterns = [
+  /^https:\/\/upload\.wikimedia\.org\//,
+  /^https:\/\/images\.unsplash\.com\//,
+  /^https:\/\/.*\.public\.blob\.vercel-storage\.com\//,
+  /^https:\/\/br-morning-resonance-b9ys3mbr\.storage\.c-7\.eu-central-1\.aws\.neon\.tech\//,
+];
+
+const isAllowedRemote = (url: string) => remotePatterns.some((pattern) => pattern.test(url));
+
+/** FNV-1a. Small, stable, and no dependencies. */
+function hash(input: string): number {
+  let value = 2166136261;
+  for (let i = 0; i < input.length; i += 1) {
+    value ^= input.charCodeAt(i);
+    value = Math.imul(value, 16777619);
+  }
+  return Math.abs(value);
+}
+
+/**
+ * The palette a missing photograph falls back to. Every entry is drawn from the
+ * Malawi-landscape set — lake, forest, sand, clay, dusk — so a page of fallback
+ * fields still reads as one place rather than as placeholders.
+ */
+const FALLBACK_PALETTES: [string, string, string][] = [
+  ["#0B6E7A", "#063E48", "#2F5D43"], // deep lake into forest
+  ["#A9603C", "#6B3520", "#E7DCC6"], // clay and sand
+  ["#2F5D43", "#1B3A2A", "#8FA97E"], // miombo woodland
+  ["#063E48", "#0B6E7A", "#E2703A"], // deep water with dusk light
+  ["#7A6A4F", "#3D3A2C", "#D3C3A4"], // highland earth
+  ["#E2703A", "#8A3B1C", "#2A2A25"], // ember into shadow
+];
+
+/**
+ * The photograph.
+ *
+ * A server component. The designed colour field is always rendered FIRST, as
+ * the background layer, and the photograph sits on top of it. If the image
+ * fails, `ResilientImage` returns null and the field is revealed — no reflow,
+ * no layout shift, and a page of photographs degrades into a page of
+ * intentional colour fields rather than a page of holes.
+ *
+ * The field underneath also means the card never flashes unstyled while a
+ * large landscape photograph streams in, which matters on mobile.
+ */
+export function Photo({
+  photoKey,
+  src,
+  alt,
+  seed,
+  className = "",
+  sizes = "(max-width: 768px) 100vw, 50vw",
+  priority = false,
+  fallbackTone = "mid",
+}: PhotoProps) {
+  const resolved = src ?? photoFor(photoKey ?? "")?.url ?? null;
+  const fieldSeed = seed ?? photoKey ?? alt;
+
+  return (
+    <>
+      <ColourField alt={alt} seed={fieldSeed} tone={fallbackTone} />
+      {resolved && isAllowedRemote(resolved) && (
+        <ResilientImage
+          src={resolved}
+          alt={alt}
+          sizes={sizes}
+          priority={priority}
+          className={className}
+        />
+      )}
+    </>
+  );
+}
+
+/** The deterministic colour field used when no photograph is available. */
+function ColourField({
+  alt,
+  seed,
+  tone: fallbackTone = "mid",
+}: {
+  alt: string;
+  seed: string;
+  tone?: "deep" | "mid" | "light";
+}) {
+  const tone = hash(seed);
+
+  // No verified photograph. A designed field: two-tone wash, a horizon line and
+  // a low sun, derived from the entry name so it is stable across renders.
+  const palette = FALLBACK_PALETTES[tone % FALLBACK_PALETTES.length];
+  const [deep, mid, accent] = palette;
+  const horizon = 52 + (tone % 17);
+  const sunX = 22 + ((tone >> 3) % 56);
+  const overlay = fallbackTone === "deep" ? 0.42 : fallbackTone === "light" ? 0.12 : 0.26;
+
+  return (
+    <div className="absolute inset-0" role="img" aria-label={alt}>
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(170deg, ${deep} 0%, ${mid} ${horizon}%, ${accent} ${horizon + 26}%, ${deep} 100%)`,
+        }}
+      />
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 400 300"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <circle cx={`${sunX}%`} cy={`${horizon - 6}%`} r="26" fill={accent} opacity="0.5" />
+        <path
+          d={`M0 ${horizon + 6} Q 100 ${horizon - 8} 200 ${horizon + 4} T 400 ${horizon} L400 300 L0 300 Z`}
+          fill={deep}
+          opacity="0.75"
+        />
+      </svg>
+      <div className="absolute inset-0 bg-ink" style={{ opacity: overlay }} />
+    </div>
+  );
+}
+
+/**
+ * Credit line for a verified photograph. Rendered wherever a photo is actually
+ * shown, because Commons images are CC-licensed and attribution is required.
+ */
+export function PhotoCredit({ photoKey }: { photoKey?: string }) {
+  const entry = photoFor(photoKey ?? "");
+  if (!entry) return null;
+
+  return (
+    <span className="text-[10px] text-white/55 tracking-wide">
+      {entry.attributionUrl ? (
+        <a
+          href={entry.attributionUrl}
+          target="_blank"
+          rel="noreferrer nofollow"
+          className="underline decoration-white/25 underline-offset-2 hover:text-white/80"
+        >
+          {entry.credit} · {entry.license}
+        </a>
+      ) : (
+        `${entry.credit} · ${entry.license}`
+      )}
+    </span>
+  );
+}

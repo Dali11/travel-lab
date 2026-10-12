@@ -19,13 +19,13 @@ export const stays: Stay[] = [
     id: "pumulani",
     slug: "pumulani-lodge",
     name: "Pumulani Lodge",
-    location: "Cape Maclear, Lake Malawi",
+    location: "Nankumba Peninsula, Mangochi",
     category: "Lodge",
     pricePerNightUsd: 420,
     rating: 48,
     blurb:
       "Hillside villas above the lake with private terraces, a beach that only guests reach, and a dive centre on site.",
-    photo: "lakeside-lodge",
+    photo: "pumulani-lodge",
     highlights: [
       "Private terraces over the lake in every villa",
       "On-site dive centre on the house reef",
@@ -67,7 +67,7 @@ export const stays: Stay[] = [
     rating: 45,
     blurb:
       "Timber and thatch above the harbour on a car-free island, with the causeway walk starting at the bottom of the garden.",
-    photo: "eco-lodge",
+    photo: "likoma-island-lodge",
     highlights: [
       "No cars anywhere on the island",
       "Walk to the causeway in ten minutes",
@@ -298,7 +298,7 @@ export const stays: Stay[] = [
     rating: 45,
     blurb:
       "Island accommodation run by the fishing villages of Senga Bay, with the income staying on the island.",
-    photo: "lake-house",
+    photo: "kumbali-island-stay",
     highlights: [
       "Community-owned — the revenue stays on the island",
       "Snorkelling off the sandbar",
